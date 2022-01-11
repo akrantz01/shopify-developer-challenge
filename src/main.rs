@@ -2,7 +2,7 @@ use axum::{routing::get, AddExtensionLayer, Router, Server};
 use eyre::WrapErr;
 use sqlx::{postgres::PgConnectOptions, ConnectOptions, PgPool};
 use std::{env, str::FromStr};
-use tracing::{info, log::LevelFilter};
+use tracing::{info, log::LevelFilter, warn};
 
 mod inventory;
 mod logging;
@@ -12,7 +12,9 @@ mod util;
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
     color_eyre::install()?;
-    dotenv::dotenv().wrap_err("failed to find .env configuration file")?;
+    if dotenv::dotenv().is_err() {
+        warn!(".env file not found");
+    }
     tracing_subscriber::fmt::init();
 
     // Get the listen address

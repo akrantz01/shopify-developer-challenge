@@ -12,7 +12,7 @@ serde_json = "1.0"
 tower = { version = "0.4.11", default-features = false }
 tower-http = { version = "0.2.0", default-features = false, features = ["request-id", "trace"] }
 
-sqlx = { version = "0.5.10", features = ["macros", "migrate", "postgres", "runtime-tokio-rustls"] }
+sqlx = { version = "0.5.10", features = ["macros", "migrate", "offline", "postgres", "runtime-tokio-rustls"] }
 
 color-eyre = { version = "0.5.11", default-features = false, features = ["track-caller"] }
 dotenv = "0.15.0"

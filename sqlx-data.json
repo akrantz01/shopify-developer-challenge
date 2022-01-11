@@ -1,0 +1,281 @@
+{
+  "db": "PostgreSQL",
+  "005f4b6cc1ecf5153ecb6267ff1b536b7524bcca14a4dbd7de244e5c7a2299c2": {
+    "query": "delete from shipment_inventory where shipment_id = $1 and item_id = $2",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int4",
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "00de47cb776dc0c867de88d37a838e3d2a6f86632cddcbf6e4ed6029f8576020": {
+    "query": "delete from inventory where id = $1",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "18cdedc211224752ae31b75a90b1a166cff68c298805761854ab34b5b6f19973": {
+    "query": "insert into shipments (name) values ($1)",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "21c566e67bf709555bc1d4c3f8658c88242ad5ebc1b0ff8e48b91f77fadea86f": {
+    "query": "update inventory set stock = stock - $1 where id = $2",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int4",
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "2c80a99ed60ef37e248c25061c32401bade375bb2a1b8736d302e20de5439709": {
+    "query": "delete from shipments where id = $1",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "4e21822f4e3b88fbcc9238b8805d2490ff7802d589787402a1e04238b2f1f4f9": {
+    "query": "insert into shipment_inventory values ($1, $2, $3) on conflict (shipment_id, item_id) do update set count = $3",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int4",
+          "Int4",
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "7bb679eabd09c796de53cb3b8854d6d831968c389f46dc8eeaa0587ad6706a87": {
+    "query": "update shipments set shipped = true where id = $1",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "84511b6e6b34da9cb4432454272fd06113f37ed2ef51fa36a3b5319d0e351bf8": {
+    "query": "update inventory set name = $1, description = $2, stock = $3",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "97bbfdd1b5ee29bb74a6fc413d1b8c2e6371f1ba21cd6f022a62ba19832f501d": {
+    "query": "insert into inventory (name, description, stock) values ($1, $2, $3)",
+    "describe": {
+      "columns": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text",
+          "Int4"
+        ]
+      },
+      "nullable": []
+    }
+  },
+  "9e7e9ff2ac47178e943732d6678640aeee7aa7b0331cadad6ed244ac04b1f434": {
+    "query": "select item_id, count from shipment_inventory where shipment_id = $1",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "item_id",
+          "type_info": "Int4"
+        },
+        {
+          "ordinal": 1,
+          "name": "count",
+          "type_info": "Int4"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      },
+      "nullable": [
+        false,
+        false
+      ]
+    }
+  },
+  "b84f3cdb26dcfc4a6939106521855cca9ed5ca6fdeaa4015c959bf1c4957bdfd": {
+    "query": "select * from shipments where id = $1",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int4"
+        },
+        {
+          "ordinal": 1,
+          "name": "name",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 2,
+          "name": "shipped",
+          "type_info": "Bool"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "bbda29ce3b8405bef53a35e9c49fe917e2b57b09e186bc7c870464b16783b835": {
+    "query": "select * from shipments",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int4"
+        },
+        {
+          "ordinal": 1,
+          "name": "name",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 2,
+          "name": "shipped",
+          "type_info": "Bool"
+        }
+      ],
+      "parameters": {
+        "Left": []
+      },
+      "nullable": [
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "ed1bf650788c0c3b1acec572d6bf47440b2456ab344fe6177b8f05d569690b97": {
+    "query": "select * from inventory where id = $1",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int4"
+        },
+        {
+          "ordinal": 1,
+          "name": "name",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 2,
+          "name": "description",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 3,
+          "name": "stock",
+          "type_info": "Int4"
+        }
+      ],
+      "parameters": {
+        "Left": [
+          "Int4"
+        ]
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  },
+  "f8deb17b1a852f3c0a147d3c1d649202935bd81e964ace5a133c66a7da1beb0b": {
+    "query": "select * from inventory",
+    "describe": {
+      "columns": [
+        {
+          "ordinal": 0,
+          "name": "id",
+          "type_info": "Int4"
+        },
+        {
+          "ordinal": 1,
+          "name": "name",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 2,
+          "name": "description",
+          "type_info": "Text"
+        },
+        {
+          "ordinal": 3,
+          "name": "stock",
+          "type_info": "Int4"
+        }
+      ],
+      "parameters": {
+        "Left": []
+      },
+      "nullable": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  }
+}
