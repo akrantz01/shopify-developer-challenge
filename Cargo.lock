@@ -1088,6 +1088,8 @@ dependencies = [
  "color-eyre",
  "dotenv",
  "eyre",
+ "serde",
+ "serde_json",
  "sqlx",
  "tokio",
  "tower",

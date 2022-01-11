@@ -4,6 +4,7 @@ use sqlx::{postgres::PgConnectOptions, ConnectOptions, PgPool};
 use std::{env, str::FromStr};
 use tracing::{info, log::LevelFilter};
 
+mod inventory;
 mod logging;
 
 #[tokio::main]
@@ -38,6 +39,7 @@ async fn main() -> eyre::Result<()> {
     // Setup the routes
     let router = Router::new()
         .route("/", get(|| async { "hello world" }))
+        .nest("/inventory", inventory::router())
         .layer(logging::layer())
         .layer(AddExtensionLayer::new(pool));
 
