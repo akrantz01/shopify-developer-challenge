@@ -1,7 +1,7 @@
 use axum::{
-    extract::{Extension, Json},
+    extract::{Extension, Json, Path},
     http::StatusCode,
-    routing::get,
+    routing::{delete, get},
     Router,
 };
 use serde::{Deserialize, Serialize};
@@ -20,7 +20,9 @@ struct InventoryItem {
 
 /// Create a router for the inventory
 pub(crate) fn router() -> Router {
-    Router::new().route("/", get(list).post(create))
+    Router::new()
+        .route("/", get(list).post(create))
+        .route("/:id", delete(remove))
 }
 
 /// Get a list of all inventory items in the database
@@ -52,4 +54,16 @@ async fn create(
     .unwrap();
 
     StatusCode::CREATED
+}
+
+/// Delete an inventory item by its ID
+async fn remove(Path(id): Path<i32>, Extension(pool): Extension<PgPool>) -> StatusCode {
+    let mut conn = pool.acquire().await.unwrap();
+
+    query!("delete from inventory where id = $1", id)
+        .execute(&mut conn)
+        .await
+        .unwrap();
+
+    StatusCode::NO_CONTENT
 }
