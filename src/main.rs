@@ -1,7 +1,8 @@
-use axum::{routing::get, Router, Server};
+use axum::{routing::get, AddExtensionLayer, Router, Server};
 use eyre::WrapErr;
-use std::env;
-use tracing::info;
+use sqlx::{postgres::PgConnectOptions, ConnectOptions, PgPool};
+use std::{env, str::FromStr};
+use tracing::{info, log::LevelFilter};
 
 mod logging;
 
@@ -17,10 +18,22 @@ async fn main() -> eyre::Result<()> {
         .parse()
         .wrap_err("invalid listen address format")?;
 
+    // Connect to the database
+    let database_url =
+        env::var("DATABASE_URL").wrap_err("missing DATABASE_URL environment variable")?;
+    let mut options =
+        PgConnectOptions::from_str(&database_url).wrap_err("invalid connection URL format")?;
+    options.log_statements(LevelFilter::Debug);
+    let pool = PgPool::connect_with(options)
+        .await
+        .wrap_err("failed connect to Postgres database")?;
+    info!("connected to the database");
+
     // Setup the routes
     let router = Router::new()
         .route("/", get(|| async { "hello world" }))
-        .layer(logging::layer());
+        .layer(logging::layer())
+        .layer(AddExtensionLayer::new(pool));
 
     // Start the server
     info!(%address, "listening and ready to handle requests");
