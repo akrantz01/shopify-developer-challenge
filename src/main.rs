@@ -29,6 +29,12 @@ async fn main() -> eyre::Result<()> {
         .wrap_err("failed connect to Postgres database")?;
     info!("connected to the database");
 
+    // Run database migrations
+    sqlx::migrate!()
+        .run(&pool)
+        .await
+        .wrap_err("failed to run database migrations")?;
+
     // Setup the routes
     let router = Router::new()
         .route("/", get(|| async { "hello world" }))
