@@ -7,3 +7,16 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgres
+    networks:
+      - default
+
+  backend:
+    image: akrantz01/shopify-developer-challenge:latest
+    build: .
+    environment:
+      RUST_LOG: debug
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+    ports:
+      - "3000:3000"
+    networks:
+      - default
