@@ -6,7 +6,7 @@ use axum::{
     Router,
 };
 use serde::{Deserialize, Serialize};
-use sqlx::{query, query_as, PgPool};
+use sqlx::{query, query_as, Acquire, PgPool};
 
 #[derive(Deserialize, Serialize)]
 struct Shipment {
@@ -167,23 +167,31 @@ async fn ship(Path(id): Path<i32>, Extension(pool): Extension<PgPool>) -> Result
     .await
     .map_err(sqlx_error)?;
 
+    // Operate in transaction
+    let mut txn = pool.begin().await.map_err(sqlx_error)?;
+
     // Update all the inventory items based on the shipment requirements
     for item in inventory {
+        let conn = txn.acquire().await.map_err(sqlx_error)?;
         query!(
             "update inventory set stock = stock - $1 where id = $2",
             item.count,
             item.item_id
         )
-        .execute(&mut conn)
+        .execute(conn)
         .await
         .map_err(sqlx_error)?;
     }
 
     // Mark the shipment as complete
+    let conn = txn.acquire().await.map_err(sqlx_error)?;
     query!("update shipments set shipped = true where id = $1", id)
-        .execute(&mut conn)
+        .execute(conn)
         .await
         .map_err(sqlx_error)?;
+
+    // Commit the changes
+    txn.commit().await.map_err(sqlx_error)?;
 
     Ok(StatusCode::NO_CONTENT)
 }
