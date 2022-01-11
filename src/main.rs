@@ -6,6 +6,7 @@ use tracing::{info, log::LevelFilter};
 
 mod inventory;
 mod logging;
+mod shipments;
 mod util;
 
 #[tokio::main]
@@ -41,6 +42,7 @@ async fn main() -> eyre::Result<()> {
     let router = Router::new()
         .route("/", get(|| async { "hello world" }))
         .nest("/inventory", inventory::router())
+        .nest("/shipments", shipments::router())
         .layer(logging::layer())
         .layer(AddExtensionLayer::new(pool));
 
