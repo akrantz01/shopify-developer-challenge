@@ -1,8 +1,16 @@
 [package]
-name = "developer"
+name = "shopify-developer-challenge"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+color-eyre = { version = "0.5.11", default-features = false, features = ["track-caller"] }
+dotenv = "0.15.0"
+eyre = "0.6.5"
+
+tokio = { version = "1.15.0", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1.29"
+tracing-subscriber = { version = "0.3.5", features = ["env-filter"] }
+uuid = { version = "0.8.2", features = ["v4"] }
