@@ -6,6 +6,7 @@ use tracing::{info, log::LevelFilter};
 
 mod inventory;
 mod logging;
+mod util;
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {

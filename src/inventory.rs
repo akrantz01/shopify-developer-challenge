@@ -1,3 +1,4 @@
+use crate::util::{sqlx_error, Result};
 use axum::{
     extract::{Extension, Json, Path},
     http::StatusCode,
@@ -36,22 +37,22 @@ pub(crate) fn router() -> Router {
 }
 
 /// Get a list of all inventory items in the database
-async fn list(Extension(pool): Extension<PgPool>) -> Json<Vec<InventoryItem>> {
-    let mut conn = pool.acquire().await.unwrap();
+async fn list(Extension(pool): Extension<PgPool>) -> Result<Json<Vec<InventoryItem>>> {
+    let mut conn = pool.acquire().await.map_err(sqlx_error)?;
 
     let inventory = query_as!(InventoryItem, "select * from inventory")
         .fetch_all(&mut conn)
         .await
-        .unwrap();
-    Json(inventory)
+        .map_err(sqlx_error)?;
+    Ok(Json(inventory))
 }
 
 /// Create a new inventory item in the database
 async fn create(
     Json(payload): Json<InventoryItem>,
     Extension(pool): Extension<PgPool>,
-) -> StatusCode {
-    let mut conn = pool.acquire().await.unwrap();
+) -> Result<StatusCode> {
+    let mut conn = pool.acquire().await.map_err(sqlx_error)?;
 
     query!(
         "insert into inventory (name, description, stock) values ($1, $2, $3)",
@@ -61,9 +62,9 @@ async fn create(
     )
     .execute(&mut conn)
     .await
-    .unwrap();
+    .map_err(sqlx_error)?;
 
-    StatusCode::CREATED
+    Ok(StatusCode::CREATED)
 }
 
 /// Edit the properties of an inventory item
@@ -71,14 +72,14 @@ async fn edit(
     Path(id): Path<i32>,
     Json(payload): Json<EditInventoryItem>,
     Extension(pool): Extension<PgPool>,
-) -> StatusCode {
-    let mut conn = pool.acquire().await.unwrap();
+) -> Result<StatusCode> {
+    let mut conn = pool.acquire().await.map_err(sqlx_error)?;
 
     // Ensure the item exists
     let item = query_as!(InventoryItem, "select * from inventory where id = $1", id)
         .fetch_one(&mut conn)
         .await
-        .unwrap();
+        .map_err(sqlx_error)?;
 
     // Change the values in the database
     query!(
@@ -89,19 +90,19 @@ async fn edit(
     )
     .execute(&mut conn)
     .await
-    .unwrap();
+    .map_err(sqlx_error)?;
 
-    StatusCode::NO_CONTENT
+    Ok(StatusCode::NO_CONTENT)
 }
 
 /// Delete an inventory item by its ID
-async fn remove(Path(id): Path<i32>, Extension(pool): Extension<PgPool>) -> StatusCode {
-    let mut conn = pool.acquire().await.unwrap();
+async fn remove(Path(id): Path<i32>, Extension(pool): Extension<PgPool>) -> Result<StatusCode> {
+    let mut conn = pool.acquire().await.map_err(sqlx_error)?;
 
     query!("delete from inventory where id = $1", id)
         .execute(&mut conn)
         .await
-        .unwrap();
+        .map_err(sqlx_error)?;
 
-    StatusCode::NO_CONTENT
+    Ok(StatusCode::NO_CONTENT)
 }
