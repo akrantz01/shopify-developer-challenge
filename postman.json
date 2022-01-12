@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "7d46c6b3-570f-454f-9555-2db45a8d6307",
+		"name": "Shopify Developer Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/inventory",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"inventory"
+							]
+						},
+						"description": "Get a list of all the inventory items in the database."
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pretzels\",\n    \"description\": \"A salty snack\",\n    \"stock\": 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/inventory",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"inventory"
+							]
+						},
+						"description": "Creates a new item in the inventory with a name.\n\nOnly `name` is required. If `description` is left out, it defaults to an empty string. If `stock` is left out, it defaults to 0."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Something\",\n    \"description\": \"An accurate description\",\n    \"stock\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/inventory/{{item_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"inventory",
+								"{{item_id}}"
+							]
+						},
+						"description": "Modify the properties of an inventory item. Any property not included will not be modified.\n\nThe `name`, `description`, and `stock` can all be modified."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/inventory/{{item_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"inventory",
+								"{{item_id}}"
+							]
+						},
+						"description": "Delete an inventory item from the database by its ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Shipments",
+			"item": [
+				{
+					"name": "Items",
+					"item": [
+						{
+							"name": "Add/Modify",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"item_id\": \"{{item_id}}\",\n    \"count\": 3\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/shipments/{{shipment_id}}/items",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"shipments",
+										"{{shipment_id}}",
+										"items"
+									]
+								},
+								"description": "Add or modify the amount of an item in the shipment. Whether or not the item already exists in the shipment does not matter.\n\nThe `item_id` specifies which item to add or modify, and the `count` specifies how many of the item will be \"shipped\". If `count` is set to 0, the item is removed from the shipment."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/shipments/{{shipment_id}}/items/{{item_id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"shipments",
+										"{{shipment_id}}",
+										"items",
+										"{{item_id}}"
+									]
+								},
+								"description": "This serves as a second method to delete an item from the shipment."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/shipments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"shipments"
+							]
+						},
+						"description": "Get a list of all shipments and their statuses from the database. The items in the shipment are not displayed in this method."
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Shipment name\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/shipments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"shipments"
+							]
+						},
+						"description": "Create a new shipment in the database. All that must be provided is a `name` for the shipment. Items must be added later through the items management interface."
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/shipments/{{shipment_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"shipments",
+								"{{shipment_id}}"
+							]
+						},
+						"description": "Get all the items in a particular shipment and the amount that should be \"shipped\"."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/shipments/{{shipment_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"shipments",
+								"{{shipment_id}}"
+							]
+						},
+						"description": "Delete a shipment by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Ship",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/shipments/{{shipment_id}}/ship",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"shipments",
+								"{{shipment_id}}",
+								"ship"
+							]
+						},
+						"description": "\"Send\" a shipment and remove the shipped items from the inventory.\n\nIf there are not enough of a particular item to ship, the entire shipment will fail. When a shipment fails, no inventory will be changed.\n\n\"Sending\" a shipment will also fail if it has already been shipped."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://127.0.0.1:3000",
+			"type": "string"
+		},
+		{
+			"key": "item_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "shipment_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
